@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LogLens</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root { --bg:#111827; --panel:#1f2937; --text:#e5e7eb; --muted:#9ca3af; --ok:#10b981; --warn:#f59e0b; --err:#ef4444; --dbg:#9ca3af; }
+    body { margin:0; font-family:Arial,sans-serif; background:var(--bg); color:var(--text); }
+    header { position:sticky; top:0; background:#0b1220; padding:14px 18px; border-bottom:1px solid #374151; z-index:5; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .card { background:var(--panel); border-radius:8px; padding:10px 12px; min-width:180px; }
+    .container { padding:16px; }
+    .source { border:1px solid #374151; border-radius:10px; padding:12px; margin-bottom:18px; }
+    canvas { background:#0f172a; border-radius:8px; padding:8px; margin:10px 0; }
+    .logs { background:#0b1220; border-radius:8px; padding:8px; max-height:260px; overflow:auto; font-family:monospace; font-size:12px; }
+    .log-line { padding:3px 0; border-bottom:1px dashed #1f2937; }
+    .ERROR { color:var(--err);} .WARN { color:var(--warn);} .INFO { color:var(--ok);} .DEBUG { color:var(--dbg);} 
+    input, select, button { background:#111827; color:var(--text); border:1px solid #4b5563; border-radius:6px; padding:6px 8px; }
+    button { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="row">
+      <h2 style="margin:0">LogLens</h2>
+      <div class="card">Ingestion/min: <b id="globalRate">0</b></div>
+      <div class="card">Active Sources: <b id="globalSources">0</b></div>
+      <div class="card">Active Alerts: <b id="globalAlerts">0</b></div>
+      <label>Range
+        <select id="range">
+          <option value="5">Last 5m</option><option value="15" selected>Last 15m</option>
+          <option value="60">Last 1h</option><option value="360">Last 6h</option><option value="1440">Last 24h</option>
+        </select>
+      </label>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="source">
+      <h3>Alert Rules</h3>
+      <div class="row">
+        <input id="metricName" placeholder="metric_name" />
+        <select id="condition"><option value="gt">gt</option><option value="lt">lt</option><option value="eq">eq</option></select>
+        <input id="threshold" placeholder="threshold" type="number" step="any" />
+        <input id="window" placeholder="window sec" type="number" value="60" />
+        <input id="webhook" placeholder="webhook url (optional)" style="min-width:220px" />
+        <input id="email" placeholder="email (optional)" />
+        <button onclick="createRule()">Create Rule</button>
+      </div>
+      <div id="rules"></div>
+    </section>
+
+    <div id="sourcesContainer"></div>
+  </div>
+
+<script>
+const charts = {};
+
+async function api(path){ const r = await fetch(path); if(!r.ok) throw new Error(await r.text()); return r.json(); }
+function nowIso(){ return new Date().toISOString(); }
+function minutesAgoIso(min){ return new Date(Date.now()-min*60000).toISOString(); }
+
+function ensureChart(id, type, labels=[], data=[]){
+  const ctx = document.getElementById(id).getContext('2d');
+  if(charts[id]){ charts[id].destroy(); }
+  charts[id] = new Chart(ctx, {type, data:{labels, datasets:[{label:id, data}]}, options:{responsive:true, plugins:{legend:{labels:{color:'#e5e7eb'}}}, scales:{x:{ticks:{color:'#9ca3af'}}, y:{ticks:{color:'#9ca3af'}}}}});
+}
+
+function sourceHtml(source){
+  return `<section class="source" id="sec-${source}">
+    <h3>Source: ${source}</h3>
+    <div class="row"><div class="card">Entries/min: <b id="epm-${source}">0</b></div><div class="card">Error rate: <b id="err-${source}">0%</b></div></div>
+    <div id="metrics-${source}"></div>
+    <div id="categories-${source}"></div>
+    <h4>Last 20 logs</h4><div class="logs" id="logs-${source}"></div>
+  </section>`;
+}
+
+async function renderSource(source){
+  const mins = parseInt(document.getElementById('range').value,10);
+  const from = encodeURIComponent(minutesAgoIso(mins));
+  const to = encodeURIComponent(nowIso());
+
+  const [metrics, categories, logs] = await Promise.all([
+    api(`/api/metrics?source=${encodeURIComponent(source)}&from=${from}&to=${to}`),
+    api(`/api/categories?source=${encodeURIComponent(source)}`),
+    api(`/api/logs?source=${encodeURIComponent(source)}&limit=20`),
+  ]);
+
+  const mWrap = document.getElementById(`metrics-${source}`); mWrap.innerHTML='';
+  Object.entries(metrics.metrics || {}).forEach(([name, points])=>{
+    const cid = `chart-${source}-${name}`.replace(/[^a-zA-Z0-9_-]/g,'_');
+    mWrap.insertAdjacentHTML('beforeend', `<h4>${name}</h4><canvas id="${cid}" height="90"></canvas>`);
+    ensureChart(cid, 'line', points.map(p=>new Date(p.t).toLocaleTimeString()), points.map(p=>p.v));
+  });
+
+  const cWrap = document.getElementById(`categories-${source}`); cWrap.innerHTML='';
+  Object.entries(categories.categories || {}).forEach(([name, values])=>{
+    const cid = `pie-${source}-${name}`.replace(/[^a-zA-Z0-9_-]/g,'_');
+    cWrap.insertAdjacentHTML('beforeend', `<h4>${name}</h4><canvas id="${cid}" height="90"></canvas>`);
+    ensureChart(cid, 'pie', Object.keys(values), Object.values(values));
+  });
+
+  const logsEl = document.getElementById(`logs-${source}`);
+  logsEl.innerHTML = (logs.logs||[]).map(l=>`<div class="log-line ${l.level}">[${l.timestamp}] [${l.level}] ${l.message}</div>`).join('');
+  const entries = (logs.logs||[]).length;
+  const errors = (logs.logs||[]).filter(l=>l.level==='ERROR').length;
+  document.getElementById(`epm-${source}`).textContent = (entries / mins).toFixed(2);
+  document.getElementById(`err-${source}`).textContent = entries ? `${((errors/entries)*100).toFixed(1)}%` : '0%';
+}
+
+async function renderAlerts(){
+  const data = await api('/api/alerts');
+  document.getElementById('globalAlerts').textContent = (data.rules||[]).length;
+  const rules = document.getElementById('rules');
+  rules.innerHTML = (data.rules||[]).map(r=>`<div class="row" style="margin-top:8px"><span>#${r.id} ${r.metric_name} ${r.condition} ${r.threshold} (${r.window_seconds}s)</span><button onclick="deleteRule(${r.id})">Delete</button></div>`).join('') || '<i>No rules yet</i>';
+}
+
+async function createRule(){
+  const payload = {
+    metric_name: document.getElementById('metricName').value,
+    condition: document.getElementById('condition').value,
+    threshold: parseFloat(document.getElementById('threshold').value),
+    window_seconds: parseInt(document.getElementById('window').value,10),
+    webhook_url: document.getElementById('webhook').value || null,
+    email: document.getElementById('email').value || null,
+  };
+  await fetch('/api/alerts/rules', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+  await renderAlerts();
+}
+
+async function deleteRule(id){ await fetch(`/api/alerts/rules/${id}`, {method:'DELETE'}); await renderAlerts(); }
+
+async function load(){
+  const [sourcesRes, stats] = await Promise.all([api('/api/sources'), api('/api/stats')]);
+  const sources = sourcesRes.sources || [];
+  document.getElementById('globalSources').textContent = sources.length;
+  document.getElementById('globalRate').textContent = stats.entries_per_min || 0;
+  const container = document.getElementById('sourcesContainer');
+  container.innerHTML = sources.map(sourceHtml).join('');
+  await Promise.all(sources.map(renderSource));
+  await renderAlerts();
+}
+
+document.getElementById('range').addEventListener('change', load);
+load();
+setInterval(load, 10000);
+</script>
+</body>
+</html>
