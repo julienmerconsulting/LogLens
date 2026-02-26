@@ -1,5 +1,8 @@
 # LogLens
 
+![LogLens Dashboard](screenshot.png)
+
+
 Plateforme légère de monitoring et d'analyse de logs en temps réel.  
 Ingestion multi-format, détection automatique, alertes configurables, dashboard intégré.
 
