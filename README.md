@@ -1,29 +1,64 @@
 <div align="center">
 
-<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=900&size=60&duration=3000&pause=1000&color=10B981&center=true&vCenter=true&width=500&height=80&lines=%F0%9F%94%8D+LogLens" alt="LogLens" />
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- BANNER SVG WAVE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0b1220,50:10B981,100:0b1220&height=220&section=header&text=&fontSize=1" />
 
-**Plateforme légère de monitoring et d'analyse de logs en temps réel**
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ANIMATED TITLE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=900&size=65&duration=3000&pause=1000&color=10B981&center=true&vCenter=true&width=600&height=90&lines=%F0%9F%94%8D+LogLens" alt="LogLens" />
 
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![SQLite](https://img.shields.io/badge/SQLite-WAL-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org)
-[![JavaScript](https://img.shields.io/badge/Vanilla_JS-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org)
-[![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)](https://www.chartjs.org)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+<br>
 
-**~550 lignes** · Zéro config · Zéro dépendance externe · Prêt en une commande
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAGLINE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=400&size=18&duration=4000&pause=2000&color=9CA3AF&center=true&vCenter=true&width=700&height=30&lines= Plateforme+l%C3%A9g%C3%A8re+de+monitoring+et+d'analyse+de+logs+en+temps+r%C3%A9el;Ingestion+multi-format+%7C+D%C3%A9tection+automatique+%7C+Alertes+%7C+Dashboard;~550+lignes+de+code.+Z%C3%A9ro+config.+Z%C3%A9ro+d%C3%A9pendance+externe." alt="tagline" />
 
-![LogLens Dashboard](screenshot.PNG)
+<br><br>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TECH BADGES -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" /></a>
+<a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" /></a>
+<a href="https://sqlite.org"><img src="https://img.shields.io/badge/SQLite-WAL-003B57?style=for-the-badge&logo=sqlite&logoColor=white" /></a>
+<a href="https://developer.mozilla.org"><img src="https://img.shields.io/badge/Vanilla_JS-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" /></a>
+<a href="https://www.chartjs.org"><img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white" /></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge" /></a>
+
+<br><br>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- STATS BADGES (style dashboard) -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<img src="https://img.shields.io/badge/📦_Fichiers-5-0b1220?style=flat-square&labelColor=1f2937" />
+&nbsp;
+<img src="https://img.shields.io/badge/📏_Lignes-~550-0b1220?style=flat-square&labelColor=1f2937" />
+&nbsp;
+<img src="https://img.shields.io/badge/⚙️_Config-Zéro-10B981?style=flat-square&labelColor=1f2937" />
+&nbsp;
+<img src="https://img.shields.io/badge/🗄️_Dépendances_externes-Zéro-10B981?style=flat-square&labelColor=1f2937" />
+&nbsp;
+<img src="https://img.shields.io/badge/🚀_Démarrage-1_commande-10B981?style=flat-square&labelColor=1f2937" />
+
+<br><br>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SCREENSHOT -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<img src="screenshot.PNG" alt="LogLens Dashboard" width="900" style="border-radius:12px" />
+
+<br>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SEPARATOR -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0b1220,50:10B981,100:0b1220&height=120&section=footer" />
 
 </div>
-
-Plateforme légère de monitoring et d'analyse de logs en temps réel.  
-Ingestion multi-format, détection automatique, alertes configurables, dashboard intégré.
-
-**Stack** : FastAPI · SQLite (WAL) · Vanilla JS · Chart.js  
-**~550 lignes** de code pour une solution complète et autonome.
-
----
 
 ## Fonctionnalités
 
