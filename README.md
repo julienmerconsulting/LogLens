@@ -1,6 +1,6 @@
 # LogLens
 
-![LogLens Dashboard](screenshot.png)
+![LogLens Dashboard](screenshot.PNG)
 
 
 Plateforme légère de monitoring et d'analyse de logs en temps réel.  
