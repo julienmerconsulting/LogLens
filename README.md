@@ -32,7 +32,7 @@
 <br><br>
 
 <!-- ═══════════════════════════════════════════════════════════ -->
-<!-- STATS BADGES (style dashboard) -->
+<!-- STATS BADGES -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <img src="https://img.shields.io/badge/📦_Fichiers-5-0b1220?style=flat-square&labelColor=1f2937" />
 &nbsp;
@@ -49,76 +49,182 @@
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- SCREENSHOT -->
 <!-- ═══════════════════════════════════════════════════════════ -->
-<img src="screenshot.PNG" alt="LogLens Dashboard" width="900" style="border-radius:12px" />
+<img src="screenshot.PNG" alt="LogLens Dashboard" width="900" />
 
 <br>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- SEPARATOR -->
-<!-- ═══════════════════════════════════════════════════════════ -->
 <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0b1220,50:10B981,100:0b1220&height=120&section=footer" />
 
 </div>
 
-## Fonctionnalités
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--                     FONCTIONNALITES                       -->
+<!-- ═══════════════════════════════════════════════════════════ -->
 
-### Ingestion multi-format avec détection automatique
+<h2>
+  <img src="https://img.shields.io/badge/🎯-Fonctionnalités-10B981?style=for-the-badge&labelColor=0b1220" />
+</h2>
 
-LogLens détecte et parse automatiquement les formats suivants sans aucune configuration :
+<!-- ────────────────────────────────────────────────────────── -->
 
-| Format | Exemple | Extraction |
-|--------|---------|------------|
-| **JSON / JSONL** | `{"level":"ERROR","message":"timeout","duration":3.5}` | Champs numériques + string |
-| **Syslog** | `Feb 26 14:30:01 srv01 nginx[1234]: request failed` | Host, process, PID, message |
-| **Nginx access log** | `192.168.1.1 - - [26/Feb/2026:14:30:01] "GET /api HTTP/1.1" 200 1234` | IP, method, path, status, bytes, response_time |
-| **CSV / TSV** | Détection automatique du séparateur via `csv.Sniffer` | Toutes les colonnes |
-| **Plain text** | Tout le reste | Timestamps ISO, nombres, level |
+<h3>📥 Ingestion multi-format avec détection automatique</h3>
 
-Chaque entrée est automatiquement enrichie :
-- **Timestamp** normalisé (8 formats supportés)
-- **Level** déduit par analyse du contenu (ERROR, WARN, INFO, DEBUG)
-- **Métriques numériques** extraites et indexées
-- **Catégories string** extraites et comptabilisées
+<p>LogLens détecte et parse automatiquement les formats suivants <b>sans aucune configuration</b> :</p>
 
-### Système d'alertes
+<table>
+  <thead>
+    <tr>
+      <th>Format</th>
+      <th>Exemple</th>
+      <th>Extraction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>JSON / JSONL</b></td>
+      <td><code>{"level":"ERROR","message":"timeout","duration":3.5}</code></td>
+      <td>Champs numériques + string</td>
+    </tr>
+    <tr>
+      <td><b>Syslog</b></td>
+      <td><code>Feb 26 14:30:01 srv01 nginx[1234]: request failed</code></td>
+      <td>Host, process, PID, message</td>
+    </tr>
+    <tr>
+      <td><b>Nginx access log</b></td>
+      <td><code>192.168.1.1 - - [26/Feb/2026:14:30:01] "GET /api" 200 1234</code></td>
+      <td>IP, method, path, status, bytes, response_time</td>
+    </tr>
+    <tr>
+      <td><b>CSV / TSV</b></td>
+      <td>Détection automatique du séparateur via <code>csv.Sniffer</code></td>
+      <td>Toutes les colonnes</td>
+    </tr>
+    <tr>
+      <td><b>Plain text</b></td>
+      <td>Tout le reste</td>
+      <td>Timestamps ISO, nombres, level</td>
+    </tr>
+  </tbody>
+</table>
 
-- Règles configurables : métrique + condition (`gt`, `lt`, `eq`) + seuil + fenêtre temporelle
-- Boucle de vérification toutes les 30 secondes
-- Notifications par **webhook** (JSON POST) et/ou **email** (SMTP)
-- Historique des alertes déclenchées
+<br>
 
-### Dashboard temps réel
+<blockquote>
+  ✅ <b>Timestamp</b> normalisé (8 formats supportés)<br>
+  ✅ <b>Level</b> déduit par analyse du contenu (ERROR, WARN, INFO, DEBUG)<br>
+  ✅ <b>Métriques numériques</b> extraites et indexées<br>
+  ✅ <b>Catégories string</b> extraites et comptabilisées
+</blockquote>
 
-- **Line charts** pour chaque métrique numérique par source
-- **Pie charts** pour la distribution des catégories
-- **Log viewer** coloré par level (ERROR rouge, WARN orange, INFO vert, DEBUG gris)
-- **Stats globales** : ingestion/min, sources actives, alertes actives
-- Rafraîchissement automatique toutes les 10 secondes
-- Sélecteur de plage temporelle : 5min, 15min, 1h, 6h, 24h
+<!-- ────────────────────────────────────────────────────────── -->
 
-### API REST
+<h3>🚨 Système d'alertes</h3>
 
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| `POST` | `/api/ingest?source=nom` | Ingestion de logs (JSON, texte, CSV) |
-| `GET` | `/api/sources` | Liste des sources détectées |
-| `GET` | `/api/metrics?source=X&from=T1&to=T2` | Séries temporelles des métriques |
-| `GET` | `/api/categories?source=X` | Distribution des catégories |
-| `GET` | `/api/logs?source=X&level=ERROR&limit=100` | Consultation des logs |
-| `GET` | `/api/stats` | Statistiques globales |
-| `POST` | `/api/alerts/rules` | Création d'une règle d'alerte |
-| `DELETE` | `/api/alerts/rules/{id}` | Suppression d'une règle |
-| `GET` | `/api/alerts` | Règles et historique des alertes |
+<blockquote>
+  🔔 Règles configurables : métrique + condition (<code>gt</code>, <code>lt</code>, <code>eq</code>) + seuil + fenêtre temporelle<br>
+  ⏱️ Boucle de vérification toutes les 30 secondes<br>
+  🔗 Notifications par <b>webhook</b> (JSON POST) et/ou <b>email</b> (SMTP)<br>
+  📜 Historique des alertes déclenchées
+</blockquote>
 
----
+<!-- ────────────────────────────────────────────────────────── -->
 
-## Installation
+<h3>📊 Dashboard temps réel</h3>
+
+<blockquote>
+  📈 <b>Line charts</b> pour chaque métrique numérique par source<br>
+  🥧 <b>Pie charts</b> pour la distribution des catégories<br>
+  🖥️ <b>Log viewer</b> coloré par level — <code>ERROR</code> 🔴 <code>WARN</code> 🟠 <code>INFO</code> 🟢 <code>DEBUG</code> ⚪<br>
+  📋 <b>Stats globales</b> : ingestion/min, sources actives, alertes actives<br>
+  🔄 Rafraîchissement automatique toutes les 10 secondes<br>
+  🕐 Sélecteur de plage : 5min · 15min · 1h · 6h · 24h
+</blockquote>
+
+<!-- ────────────────────────────────────────────────────────── -->
+
+<h3>🔌 API REST</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Méthode</th>
+      <th>Endpoint</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="https://img.shields.io/badge/POST-49cc90?style=flat-square" /></td>
+      <td><code>/api/ingest?source=nom</code></td>
+      <td>Ingestion de logs (JSON, texte, CSV)</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/GET-61affe?style=flat-square" /></td>
+      <td><code>/api/sources</code></td>
+      <td>Liste des sources détectées</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/GET-61affe?style=flat-square" /></td>
+      <td><code>/api/metrics?source=X&amp;from=T1&amp;to=T2</code></td>
+      <td>Séries temporelles des métriques</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/GET-61affe?style=flat-square" /></td>
+      <td><code>/api/categories?source=X</code></td>
+      <td>Distribution des catégories</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/GET-61affe?style=flat-square" /></td>
+      <td><code>/api/logs?source=X&amp;level=ERROR&amp;limit=100</code></td>
+      <td>Consultation des logs</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/GET-61affe?style=flat-square" /></td>
+      <td><code>/api/stats</code></td>
+      <td>Statistiques globales</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/POST-49cc90?style=flat-square" /></td>
+      <td><code>/api/alerts/rules</code></td>
+      <td>Création d'une règle d'alerte</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/DELETE-f93e3e?style=flat-square" /></td>
+      <td><code>/api/alerts/rules/{id}</code></td>
+      <td>Suppression d'une règle</td>
+    </tr>
+    <tr>
+      <td><img src="https://img.shields.io/badge/GET-61affe?style=flat-square" /></td>
+      <td><code>/api/alerts</code></td>
+      <td>Règles et historique des alertes</td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--                      INSTALLATION                         -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<h2>
+  <img src="https://img.shields.io/badge/⚡-Installation-10B981?style=for-the-badge&labelColor=0b1220" />
+</h2>
 
 ```bash
 pip install fastapi uvicorn
 ```
 
-## Lancement
+<br>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--                       LANCEMENT                           -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<h2>
+  <img src="https://img.shields.io/badge/🚀-Lancement-10B981?style=for-the-badge&labelColor=0b1220" />
+</h2>
 
 ```bash
 python main.py
@@ -135,13 +241,23 @@ python main.py
 LogLens running at http://localhost:8000
 ```
 
-La base SQLite `loglens.db` est créée automatiquement au premier lancement.
+<blockquote>
+  💾 La base SQLite <code>loglens.db</code> est créée automatiquement au premier lancement.
+</blockquote>
 
----
+<br>
 
-## Utilisation
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--                      UTILISATION                          -->
+<!-- ═══════════════════════════════════════════════════════════ -->
 
-### Envoyer des logs JSON
+<h2>
+  <img src="https://img.shields.io/badge/📡-Utilisation-10B981?style=for-the-badge&labelColor=0b1220" />
+</h2>
+
+<details>
+<summary><b>📤 Envoyer des logs JSON</b></summary>
+<br>
 
 ```bash
 curl -X POST http://localhost:8000/api/ingest?source=mon-app \
@@ -149,15 +265,22 @@ curl -X POST http://localhost:8000/api/ingest?source=mon-app \
   -d '{"level":"ERROR","message":"Connection timeout","duration_ms":3500}'
 ```
 
-### Envoyer des logs texte (syslog, nginx, plain)
+</details>
+
+<details>
+<summary><b>📄 Envoyer des logs texte (syslog, nginx, plain)</b></summary>
+<br>
 
 ```bash
-# Pipe direct depuis un fichier de logs
 cat /var/log/nginx/access.log | curl -X POST http://localhost:8000/api/ingest?source=nginx \
   -H "Content-Type: text/plain" --data-binary @-
 ```
 
-### Envoyer du CSV
+</details>
+
+<details>
+<summary><b>📊 Envoyer du CSV</b></summary>
+<br>
 
 ```bash
 curl -X POST http://localhost:8000/api/ingest?source=metrics \
@@ -167,10 +290,13 @@ curl -X POST http://localhost:8000/api/ingest?source=metrics \
 2026-02-26T14:00:01,ERROR,timeout,3500'
 ```
 
-### Créer une alerte
+</details>
+
+<details>
+<summary><b>🚨 Créer une alerte</b></summary>
+<br>
 
 ```bash
-# Alerte si response_time > 2000ms sur les 60 dernières secondes
 curl -X POST http://localhost:8000/api/alerts/rules \
   -H "Content-Type: application/json" \
   -d '{
@@ -182,9 +308,17 @@ curl -X POST http://localhost:8000/api/alerts/rules \
   }'
 ```
 
----
+</details>
 
-## Architecture
+<br>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--                     ARCHITECTURE                          -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<h2>
+  <img src="https://img.shields.io/badge/🏗️-Architecture-10B981?style=for-the-badge&labelColor=0b1220" />
+</h2>
 
 ```
 LogLens (5 fichiers, ~550 lignes)
@@ -197,7 +331,9 @@ LogLens (5 fichiers, ~550 lignes)
     └── index.html   # Dashboard (vanilla JS + Chart.js)
 ```
 
-### Schéma de la base
+<details>
+<summary><b>🗄️ Schéma de la base de données</b></summary>
+<br>
 
 ```
 log_entries          metrics              categories          alert_rules         alert_history
@@ -211,19 +347,57 @@ log_entries          metrics              categories          alert_rules       
 └── created_at                                                └── enabled
 ```
 
-### Principes de conception
+</details>
 
-- **Zéro configuration** : envoie des logs, LogLens détecte le format
-- **Zéro dépendance externe** : SQLite embarqué, pas de Redis, pas de Kafka, pas d'Elasticsearch
-- **Thread-safe** : DB_LOCK sur toutes les opérations SQLite, WAL mode pour la concurrence lecture/écriture
-- **Autonome** : un seul `python main.py` et c'est en prod
+<br>
 
----
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--                PRINCIPES DE CONCEPTION                    -->
+<!-- ═══════════════════════════════════════════════════════════ -->
 
-## Licence
+<h2>
+  <img src="https://img.shields.io/badge/🧠-Principes_de_conception-10B981?style=for-the-badge&labelColor=0b1220" />
+</h2>
 
-MIT
+<table>
+  <tr>
+    <td align="center" width="25%">
+      <img src="https://img.shields.io/badge/⚙️-Zéro_config-10B981?style=for-the-badge&labelColor=1f2937" /><br><br>
+      Envoie des logs,<br>LogLens détecte le format
+    </td>
+    <td align="center" width="25%">
+      <img src="https://img.shields.io/badge/📦-Zéro_dépendance-10B981?style=for-the-badge&labelColor=1f2937" /><br><br>
+      SQLite embarqué<br>Pas de Redis, Kafka, Elastic
+    </td>
+    <td align="center" width="25%">
+      <img src="https://img.shields.io/badge/🔒-Thread--safe-10B981?style=for-the-badge&labelColor=1f2937" /><br><br>
+      DB_LOCK sur toutes les ops<br>WAL mode pour la concurrence
+    </td>
+    <td align="center" width="25%">
+      <img src="https://img.shields.io/badge/🚀-Autonome-10B981?style=for-the-badge&labelColor=1f2937" /><br><br>
+      Un seul <code>python main.py</code><br>et c'est en prod
+    </td>
+  </tr>
+</table>
 
----
+<br>
 
-**JMerConsulting** — [github.com/julienmerconsulting](https://github.com/julienmerconsulting)
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!--                        FOOTER                             -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<div align="center">
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0b1220,50:10B981,100:0b1220&height=120&section=footer" />
+
+<br>
+
+<a href="https://github.com/julienmerconsulting"><img src="https://img.shields.io/badge/JMerConsulting-181717?style=for-the-badge&logo=github&logoColor=white" /></a>
+&nbsp;
+<a href="https://www.linkedin.com/in/julienmer/"><img src="https://img.shields.io/badge/Julien_Mer-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" /></a>
+
+<br><br>
+
+<img src="https://img.shields.io/badge/Made_with-☕_et_du_code_à_23h-1f2937?style=flat-square" />
+
+</div>
