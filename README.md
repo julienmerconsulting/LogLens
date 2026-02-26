@@ -15,7 +15,7 @@
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- TAGLINE -->
 <!-- ═══════════════════════════════════════════════════════════ -->
-<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=400&size=18&duration=4000&pause=2000&color=9CA3AF&center=true&vCenter=true&width=700&height=30&lines=Plateforme+l%C3%A9g%C3%A8re+de+monitoring+et+d'analyse+de+logs+en+temps+r%C3%A9el;Ingestion+multi-format+%7C+D%C3%A9tection+automatique+%7C+Alertes+%7C+Dashboard;~550+lignes+de+code.+Z%C3%A9ro+config.+Z%C3%A9ro+d%C3%A9pendance+externe." alt="tagline" />
+<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=400&size=18&duration=4000&pause=2000&color=9CA3AF&center=true&vCenter=true&width=980&height=30&lines=Plateforme+l%C3%A9g%C3%A8re+de+monitoring+et+d'analyse+de+logs+en+temps+r%C3%A9el;Ingestion+multi-format+%7C+D%C3%A9tection+automatique+%7C+Alertes+%7C+Dashboard;~550+lignes+de+code.+Z%C3%A9ro+config.+Z%C3%A9ro+d%C3%A9pendance+externe." alt="tagline" />
 
 <br><br>
 
