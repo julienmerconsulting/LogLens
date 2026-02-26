@@ -1,7 +1,21 @@
-# LogLens
+<div align="center">
+
+<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=900&size=60&duration=3000&pause=1000&color=10B981&center=true&vCenter=true&width=500&height=80&lines=%F0%9F%94%8D+LogLens" alt="LogLens" />
+
+**Plateforme légère de monitoring et d'analyse de logs en temps réel**
+
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![SQLite](https://img.shields.io/badge/SQLite-WAL-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org)
+[![JavaScript](https://img.shields.io/badge/Vanilla_JS-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org)
+[![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)](https://www.chartjs.org)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
+**~550 lignes** · Zéro config · Zéro dépendance externe · Prêt en une commande
 
 ![LogLens Dashboard](screenshot.PNG)
 
+</div>
 
 Plateforme légère de monitoring et d'analyse de logs en temps réel.  
 Ingestion multi-format, détection automatique, alertes configurables, dashboard intégré.
