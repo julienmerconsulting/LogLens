@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.bak
+*.db
+*.db-shm
+*.db-wal"
+git
+loglens.db-wal

@@ -101,7 +101,10 @@ def _parse_json_obj(obj: Dict[str, Any], fallback_source: str, raw: str) -> Dict
                 numeric_fields[k] = float(v)
             except ValueError:
                 pass
-
+    # Exclude non-categorical fields
+    for skip in ("timestamp", "time", "ts", "message", "msg", "event", "raw", "raw_line"):
+        string_fields.pop(skip, None)
+        numeric_fields.pop(skip, None)
     return {
         "timestamp": _normalize_timestamp(str(ts) if ts is not None else None),
         "source": str(source),

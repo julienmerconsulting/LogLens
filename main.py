@@ -232,9 +232,7 @@ def get_metrics(source: Optional[str] = None, from_: Optional[str] = Query(defau
     if from_:
         filters.append("m.timestamp >= ?")
         params.append(from_)
-    if to:
-        filters.append("m.timestamp <= ?")
-        params.append(to)
+ 
 
     sql = f"""
     SELECT m.metric_name, m.timestamp, m.metric_value
